@@ -6,17 +6,31 @@ from pynput import keyboard
 import pyautogui,time
 from pynput import mouse
 
-import main
+# import main
+from node_editor.node_editor_widget import NodeEditorWidget
+from node_editor.node_scene import Scene, InvalidFile
+from node_editor.node_node import Node
+from node_editor.node_edge import Edge, EDGE_TYPE_BEZIER
+from node_editor.node_graphics_view import QDMGraphicsView
+from node_editor.utils import dumpException
 
 '''
       Click Operation and its properties
 '''
 class clickWindow(QtWidgets.QMainWindow):
+    # Scene_class = Scene
+    # GraphicsView_class = QDMGraphicsView
+    NodeEditorWidget_class = NodeEditorWidget
     def __init__(self, df=None):
         super(clickWindow, self).__init__()
-        sshFile = os.path.join("style", "style.qss")
-        with open(sshFile, "r") as fh:
-            self.setStyleSheet(fh.read())
+
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy.MinimumExpanding,
+            QtWidgets.QSizePolicy.MinimumExpanding
+        )
+        # sshFile = os.path.join("style", "style.qss")
+        # with open(sshFile, "r") as fh:
+        #     self.setStyleSheet(fh.read())
         if df is None:
             self.keyEvents = pd.DataFrame(columns=['Type', 'Button', 'Coordinates'])
         else:
@@ -31,39 +45,39 @@ class clickWindow(QtWidgets.QMainWindow):
         self.setWindowTitle(" Properties for Click Element")
 
         self.click_label = QtWidgets.QLabel(self)
-        self.click_label.setGeometry(QtCore.QRect(150, 145, 151, 31))
+        self.click_label.setGeometry(QtCore.QRect(20, 145, 151, 31))
         self.click_label.setObjectName("click_label")
         self.click_label.setText("Element data")
 
         self.click_textEdit = QtWidgets.QLineEdit(self)
-        self.click_textEdit.setGeometry(QtCore.QRect(260, 140, 301, 35))
+        self.click_textEdit.setGeometry(QtCore.QRect(100, 140, 151, 35))
         self.click_textEdit.setObjectName("click_textEdit")
 
         self.note_label = QtWidgets.QLabel(self)
-        self.note_label.setGeometry(QtCore.QRect(150, 185, 251, 31))
+        self.note_label.setGeometry(QtCore.QRect(20, 185, 251, 31))
         self.note_label.setObjectName("note_label")
         self.note_label.setText("*Note: Type in to text field to enter data manually ")
 
 
         self.element_type_label = QtWidgets.QLabel(self)
-        self.element_type_label.setGeometry(QtCore.QRect(150, 230, 151, 31))
+        self.element_type_label.setGeometry(QtCore.QRect(20, 230, 151, 31))
         self.element_type_label.setObjectName("element_type_label")
         self.element_type_label.setText("Choose element type:")
 
         self.element_type = QtWidgets.QComboBox(self)
-        self.element_type.setGeometry(QtCore.QRect(310, 230, 150, 22))
+        self.element_type.setGeometry(QtCore.QRect(150, 230, 150, 22))
         self.element_type.setObjectName("et_comboBox")
         self.element_type.addItem("Xpath")
         self.element_type.addItem("Coordinates")
         self.element_type.addItem("Image")
 
         self.click_type_label = QtWidgets.QLabel(self)
-        self.click_type_label.setGeometry(QtCore.QRect(150, 265, 151, 31))
+        self.click_type_label.setGeometry(QtCore.QRect(20, 265, 151, 31))
         self.click_type_label.setObjectName("click_type_label")
         self.click_type_label.setText("Choose type of click:")
 
         self.click_type = QtWidgets.QComboBox(self)
-        self.click_type.setGeometry(QtCore.QRect(310, 270, 150, 22))
+        self.click_type.setGeometry(QtCore.QRect(150, 270, 150, 22))
         self.click_type.setObjectName("ct_comboBox")
         self.click_type.addItem("Click")
         self.click_type.addItem("Double Click")
@@ -77,7 +91,7 @@ class clickWindow(QtWidgets.QMainWindow):
         self.indicate_Button.clicked.connect(self.indicate_onscreen)
 
         self.ok_browse_Button = QtWidgets.QPushButton(self)
-        self.ok_browse_Button.setGeometry(QtCore.QRect(500, 140, 60, 35))
+        self.ok_browse_Button.setGeometry(QtCore.QRect(250, 140, 60, 35))
         self.ok_browse_Button.setObjectName("ok_browse_Button")
         self.ok_browse_Button.setText("Select")
 
@@ -94,12 +108,17 @@ class clickWindow(QtWidgets.QMainWindow):
         self.close_Button.clicked.connect(self.close_properties)
 
         self.ok_browse_Button.clicked.connect(self.getfiles)
-
+        self.scene = Scene()
         self.show()
+
+
+    def addNodes(self):
+        node1 = Node(self.scene, "My Awesome Node 1", inputs=[0, 0, 0], outputs=[1])
 
     '''
        Get Files when the element type is Image
     '''
+
 
     def getfiles(self):
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Single File', QtCore.QDir.rootPath(), '*')
@@ -128,7 +147,13 @@ class clickWindow(QtWidgets.QMainWindow):
             f.write(c_type + " " + str(data))
         self.click_textEdit.setText("")
         self.close_properties()
-        main.ProcessWindow.refresh(self)
+        self.addNodes()
+        # main.ProcessWindow.refresh(self)
+        # node_editor = self.getCurrentNodeEditorWidget()
+        # node_editor=self.
+        NodeEditorWidget.addNodes(self)
+        # self.NodeEditorWidget_class.addNodes()
+        print(NodeEditorWidget)
 
     def close_properties(self):
         self.close()

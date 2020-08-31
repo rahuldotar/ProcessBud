@@ -6,20 +6,16 @@ from pynput import keyboard
 import pyautogui,time
 from pynput import mouse
 
-# import main
 from node_editor.node_editor_widget import NodeEditorWidget
 from node_editor.node_scene import Scene, InvalidFile
 from node_editor.node_node import Node
-from node_editor.node_edge import Edge, EDGE_TYPE_BEZIER
-from node_editor.node_graphics_view import QDMGraphicsView
-from node_editor.utils import dumpException
+
 
 '''
       Click Operation and its properties
 '''
 class clickWindow(QtWidgets.QMainWindow):
-    # Scene_class = Scene
-    # GraphicsView_class = QDMGraphicsView
+
     NodeEditorWidget_class = NodeEditorWidget
     def __init__(self, df=None):
         super(clickWindow, self).__init__()
@@ -28,9 +24,7 @@ class clickWindow(QtWidgets.QMainWindow):
             QtWidgets.QSizePolicy.MinimumExpanding,
             QtWidgets.QSizePolicy.MinimumExpanding
         )
-        # sshFile = os.path.join("style", "style.qss")
-        # with open(sshFile, "r") as fh:
-        #     self.setStyleSheet(fh.read())
+
         if df is None:
             self.keyEvents = pd.DataFrame(columns=['Type', 'Button', 'Coordinates'])
         else:
@@ -101,11 +95,6 @@ class clickWindow(QtWidgets.QMainWindow):
         self.ok_Button.setText("OK")
         self.ok_Button.clicked.connect(self.writeScript)
 
-        self.close_Button = QtWidgets.QPushButton(self)
-        self.close_Button.setGeometry(QtCore.QRect(330, 350, 75, 31))
-        self.close_Button.setObjectName("close_Button")
-        self.close_Button.setText("CANCEL")
-        self.close_Button.clicked.connect(self.close_properties)
 
         self.ok_browse_Button.clicked.connect(self.getfiles)
         self.scene = Scene()
@@ -146,20 +135,12 @@ class clickWindow(QtWidgets.QMainWindow):
             f.write("\n")
             f.write(c_type + " " + str(data))
         self.click_textEdit.setText("")
-        self.close_properties()
-        self.addNodes()
-        # main.ProcessWindow.refresh(self)
-        # node_editor = self.getCurrentNodeEditorWidget()
-        # node_editor=self.
-        NodeEditorWidget.addNodes(self)
-        # self.NodeEditorWidget_class.addNodes()
-        print(NodeEditorWidget)
 
     def close_properties(self):
         self.close()
 
     '''
-    Indicate Elements or Coordinates
+    indicate elements or coordinates
     '''
 
     def indicate_onscreen(self):

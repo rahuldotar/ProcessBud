@@ -8,7 +8,7 @@ from node_editor.node_editor_window import NodeEditorWindow
 from process.process_gui.process_sub_window import CalculatorSubWindow
 from process.process_gui.process_drag_listbox import QDMDragListbox
 from node_editor.utils import dumpException, pp
-# from node_editor.node_editor_widget import NodeEditorWidget
+
 
 # Enabling edge validators
 from node_editor.node_edge import Edge
@@ -31,11 +31,8 @@ class main_Window(NodeEditorWindow):
     def initUI(self):
         # self.view = QDMGraphicsView
         # self.view.itemsel.connect(self.propertiesDock)
-        self.click=clickWindow()
+        self.showMaximized()
         self.propertiesPanel=PropertiesPanel
-        self.name_company = 'Blenderfreak'
-        self.name_product = 'Calculator NodeEditor'
-
         self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/node_editor.qss")
         loadStylesheets(
             os.path.join(os.path.dirname(__file__), "qss/node_editor-dark.qss"),
@@ -46,7 +43,6 @@ class main_Window(NodeEditorWindow):
 
         if DEBUG:
             print("Registered nodes:")
-            pp(CALC_NODES)
 
 
         self.mdiArea = QMdiArea()
@@ -65,9 +61,7 @@ class main_Window(NodeEditorWindow):
         # QDMGraphicsView.leftMouseButtonRelease.connect(self.createNodesDock2)
 
         self.createNodesDock()
-        self.propertiesDock("test")
-        # self.createNodesDock3()
-
+        self.propertiesDock("non")
         self.createActions()
         self.createMenus()
         self.createToolBars()
@@ -78,14 +72,6 @@ class main_Window(NodeEditorWindow):
 
         self.setWindowTitle("ProcessBud")
         self.properties=PropertiesPanel
-
-    def mouseReleaseEvent(self, event: QMouseEvent):
-        """Dispatch Qt's mouseRelease event to corresponding function below"""
-
-        if event.button() == Qt.LeftButton:
-            for itemdt in self.grScene.selectedItems():
-                itemid = itemdt.node.id
-
 
 
     def closeEvent(self, event):
@@ -263,26 +249,15 @@ class main_Window(NodeEditorWindow):
         self.addDockWidget(Qt.LeftDockWidgetArea, self.nodesDock)
 
     def propertiesDock(self, value="none"):
-        # print(config.property)
+        print(value)
+        if value =="none":
+            print("No properties")
+        else:
+            self.click = clickWindow()
+
         self.propertiesPanel.propertytab(self,value)
-        # self.node_editor.view.scenePosChanged.connect(self.onScenePosChanged)
-        # # self.properties.propertytab(self,"none")
-        # self.getCurrentNodeEditorWidget()
-        # # self.elements()
 
-    # def elements(self):
-    #     self.nodesListWidget2.addWidget(self.click_button)
-    #     self.nodesListWidget2.addWidget(self.wait_button)
-    #     self.nodesListWidget2.addWidget(self.type_button)
 
-    def createNodesDock3(self):
-        self.nodesListWidget3 = QDMDragListbox()
-
-        self.nodesDock3 = QDockWidget("Email")
-        self.nodesDock3.setWidget(self.nodesListWidget3)
-        self.nodesDock3.setFloating(False)
-
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.nodesDock3)
     def createStatusBar(self):
         self.statusBar().showMessage("Ready")
 

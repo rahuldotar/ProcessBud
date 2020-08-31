@@ -13,13 +13,6 @@ from node_editor.node_graphics_edge import QDMGraphicsEdge
 from node_editor.node_edge_dragging import EdgeDragging
 from node_editor.node_graphics_cutline import QDMCutLine
 from node_editor.utils import dumpException
-# import config
-# from process.process_gui.properties import PropertiesPanel
-# # from mywindow import myWindow
-#
-# from node_editor.node_scene import Scene
-# from node_editor.node_node import Node
-# from node_editor.node_graphics_node import QDMGraphicsNode
 
 
 MODE_NOOP = 1               #: Mode representing ready state
@@ -90,9 +83,6 @@ class QDMGraphicsView(QGraphicsView):
         self._drag_enter_listeners = []
         self._drop_listeners = []
 
-        # self.scene=Scene
-        # self.nodes=Node
-        # self.process=myWindow
 
 
     def initUI(self):
@@ -141,7 +131,7 @@ class QDMGraphicsView(QGraphicsView):
         self._drop_listeners.append(callback)
 
     def mousePressEvent(self, event:QMouseEvent):
-        print("mousedt")
+
         """Dispatch Qt's mousePress event to corresponding function below"""
         if event.button() == Qt.MiddleButton:
             self.middleMouseButtonPress(event)

@@ -2,6 +2,7 @@ import os
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from node_editor.node_graphics_view import QDMGraphicsView
 
 from node_editor.utils import loadStylesheets
 from node_editor.node_editor_window import NodeEditorWindow
@@ -61,7 +62,7 @@ class main_Window(NodeEditorWindow):
         # QDMGraphicsView.leftMouseButtonRelease.connect(self.createNodesDock2)
 
         self.createNodesDock()
-        self.propertiesDock("non")
+        self.propertiesDock("itemproperty")
         self.createActions()
         self.createMenus()
         self.createToolBars()
